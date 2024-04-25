@@ -1,0 +1,5 @@
+{
+    "context": {
+      "file_header": "# Project Rules\n\nThis file contains the rules and guidelines that should be followed when working on this project. If any new rules are added or existing rules are changed, they should be updated in this file. Those Rules also are there to help the AI creating the app"
+    }
+  }
