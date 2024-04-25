@@ -41,12 +41,12 @@ def draw_board(board, current_selected_column, turn):
     # Draw the additional top row if needed for game info
     for c in range(COLUMN_COUNT):
         for r in range(ROW_COUNT):
-            # Draw the board cells starting from the second row of pixels
-            pygame.draw.rect(screen, (0, 0, 255), (c * SQUARESIZE, (r + 1) * SQUARESIZE, SQUARESIZE, SQUARESIZE))
-            # Calculate the center for the pucks to be drawn
+            # Calculate the y-coordinate from the bottom of the board
+            pygame.draw.rect(screen, (0, 0, 255), (c * SQUARESIZE, height - (r + 1) * SQUARESIZE, SQUARESIZE, SQUARESIZE))
+            # Calculate the center for the discs to be drawn
             center_x = int(c * SQUARESIZE + SQUARESIZE / 2)
-            center_y = int((r + 1) * SQUARESIZE + SQUARESIZE / 2)
-            # Draw the pucks
+            center_y = height - int((r + 0.5) * SQUARESIZE)
+            # Draw the discs
             if board[r][c] == PLAYER_1:
                 pygame.draw.circle(screen, (0, 255, 0), (center_x, center_y), int(SQUARESIZE / 2 - 5))
             elif board[r][c] == PLAYER_2:
@@ -77,27 +77,47 @@ def check_win(board, piece):
     for c in range(COLUMN_COUNT-3):
         for r in range(ROW_COUNT):
             if board[r][c] == piece and board[r][c+1] == piece and board[r][c+2] == piece and board[r][c+3] == piece:
+                draw_winning_box(r, c, 'horizontal')
+                pygame.time.wait(2000)  # Wait a few seconds after drawing the winning circle
                 return True
 
     # Check vertical locations for win
     for c in range(COLUMN_COUNT):
         for r in range(ROW_COUNT-3):
             if board[r][c] == piece and board[r+1][c] == piece and board[r+2][c] == piece and board[r+3][c] == piece:
+                draw_winning_box(r, c, 'vertical')
+                pygame.time.wait(2000)  # Wait a few seconds after drawing the winning circle
                 return True
 
     # Check positively sloped diagonals
     for c in range(COLUMN_COUNT-3):
         for r in range(ROW_COUNT-3):
             if board[r][c] == piece and board[r+1][c+1] == piece and board[r+2][c+2] == piece and board[r+3][c+3] == piece:
+                draw_winning_box(r, c, 'positive_diagonal')
+                pygame.time.wait(2000)  # Wait a few seconds after drawing the winning circle
                 return True
 
     # Check negatively sloped diagonals
     for c in range(COLUMN_COUNT-3):
         for r in range(3, ROW_COUNT):
             if board[r][c] == piece and board[r-1][c+1] == piece and board[r-2][c+2] == piece and board[r-3][c+3] == piece:
+                draw_winning_box(r, c, 'negative_diagonal')
+                pygame.time.wait(2000)  # Wait a few seconds after drawing the winning circle
                 return True
 
     return False
+
+def draw_winning_box(row, col, direction):
+    if direction == 'horizontal':
+        pygame.draw.rect(screen, (255, 255, 0), (col * SQUARESIZE, height - (row + 1) * SQUARESIZE, 4 * SQUARESIZE, SQUARESIZE), 5)
+    elif direction == 'vertical':
+        pygame.draw.rect(screen, (255, 255, 0), (col * SQUARESIZE, height - (row + 4) * SQUARESIZE, SQUARESIZE, 4 * SQUARESIZE), 5)
+    elif direction == 'positive_diagonal':
+        for i in range(4):
+            pygame.draw.rect(screen, (255, 255, 0), ((col + i) * SQUARESIZE, height - (row + i + 1) * SQUARESIZE, SQUARESIZE, SQUARESIZE), 5)
+    elif direction == 'negative_diagonal':
+        for i in range(4):
+            pygame.draw.rect(screen, (255, 255, 0), ((col + i) * SQUARESIZE, height - (row - i + 1) * SQUARESIZE, SQUARESIZE, SQUARESIZE), 5)
 
 def main():
     game_over = False
