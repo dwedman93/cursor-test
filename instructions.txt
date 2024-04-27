@@ -1,0 +1,6 @@
+# 1. Game should be snake
+# 2. Game must include pygame
+# 3. Snake can pass through wall and appears on the opposite side
+# 4. There should be an Game over screen after game finishes.
+# 5. After Game over, the player can press a key to start a new game.
+# 6. Player can move snake with arrow keys and wasd keys.
